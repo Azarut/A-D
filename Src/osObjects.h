@@ -30,12 +30,15 @@ osThreadDef (sample_name, osPriorityNormal, 1, 0);       // thread object
 */
 extern void MainTask (void const *argument);          // thread function
 extern void ReadADTask (void const *argument);          // thread function
+extern void Rx_Blink (void const *argument);          // thread function
 
 osThreadId tid_MainTask; 
 osThreadId tid_ReadADTask; // thread id
+osThreadId tid_Rx_Blink; // thread id
 
 osThreadDef (MainTask, osPriorityNormal, 1, 0);       // thread object
 osThreadDef (ReadADTask, osPriorityNormal, 1, 0);       // thread object
+osThreadDef (Rx_Blink, osPriorityNormal, 1, 0);       // thread object
 // global 'semaphores' ----------------------------------------------------------
 /* 
 Example:

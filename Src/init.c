@@ -2,7 +2,7 @@
 
 uint8_t stringtosend[] = "DMA\n";
 uint8_t stringtoreceive[32] = {0};
-uint8_t RX_Buffer[16] = {0};
+uint8_t RX_Buffer[11] = {0};
 uint8_t TX_Buffer[904] = {0};
 
 void Configure_GPIO_LED(void)
@@ -85,7 +85,7 @@ void Configure_USART2(void)
 {USART_InitTypeDef UART_Config;
 	
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
-	UART_Config.USART_BaudRate = 115200;
+	UART_Config.USART_BaudRate = 9600;
 	UART_Config.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 	UART_Config.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 	UART_Config.USART_Parity = USART_Parity_No;

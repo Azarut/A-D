@@ -19,6 +19,8 @@ uint16_t Systolic = 0;
 uint16_t Dyatolic = 0;
 uint16_t Pulse = 0;
 
+uint8_t Led_State = 0;
+
 int16_t  Version = 0x0003;
 int32_t  TransmitterID = 123456789;
 int16_t  MessageType = 3;
@@ -47,7 +49,7 @@ uint8_t DEL_SMS[19] = "AT+CMGDA=\"DEL ALL\"\r";
 uint8_t APN[19] = "AT+CSTT=\"internet\"\r"; 
 uint8_t CHK_CONNECT[9] =  "AT+CIICR\r";
 uint8_t CHK_IP[9] = "AT+CIFSR\r";
-uint8_t SRV_CONNECT[43] = "AT+CIPSTART=\"TCP\",\"192.168.000.001\",\"8081\"\r";
+uint8_t SRV_CONNECT[43] = "AT+CIPSTART=\"TCP\",\"054.203.229.250\",\"8081\"\r";
 uint8_t SEND_DATA[11] = "AT+CIPSEND\r";
 uint8_t CHK_GPRS[10] = "AT+CGATT?\r";
 uint8_t GPRS_CONNECT[11] = "AT+CGATT=1\r";
@@ -101,7 +103,57 @@ uint16_t crc16(const void * const message, const uint16_t nBytes)
 
     return (remainder ^ CRC16_FINAL_XOR_VALUE);
 }
-		
+void Rx_Blink (void const *argument)
+{
+while(1)
+{
+	switch(Led_State)
+	{
+		case 1: 
+			Green_On;
+			osDelay(33);
+		  Green_Off;     // 
+		  osDelay(300);
+			break;
+		case 2: 
+			Red_On;
+			osDelay(33);
+		  Red_Off;
+		  osDelay(1000);
+			break;
+		case 3: 
+			Red_On;
+			osDelay(33);
+			Red_On;
+			osDelay(33);
+			Red_On;
+			osDelay(33);
+			Red_On;
+			osDelay(33);
+			Red_On;
+			osDelay(33);
+		  Red_Off;
+		  osDelay(500);
+			break;
+		case 4: 
+			Green_On;
+			osDelay(1000);
+		  Green_Off;
+			Led_State = 0;
+			break;
+		case 5: 
+			Red_On;
+			osDelay(1000);
+		  Red_Off;
+			Led_State = 0;
+		break;
+		default:
+			 Green_Off;
+			 Red_Off;
+			break;		
+	}
+}
+}	
 void RX_Clear(void)
 {
 	DMA_InitTypeDef dma_2;
@@ -163,7 +215,7 @@ void Init_SIM800(void)
 	    send_str(CHK_IP, 9);
 		  osDelay(1000);
 	    send_str(SRV_CONNECT, 43);
-		  osDelay(3000); 
+		  osDelay(5000); 
 }
 void UART2_DMA_SEND(uint8_t string[], uint8_t lenghth)
 {
@@ -236,11 +288,16 @@ void ReadADTask (void const *argument)
 			CRC_calc = crc16((uint32_t*)aTCP_Buffer, 20);
 			aTCP_Buffer[21] = (uint8_t)CRC_calc;
 			aTCP_Buffer[20] =  CRC_calc >> 8;
+			Led_State = 1;
 			send_str(SEND_DATA, 11);
 		  osDelay(1000);
 	    send_str(aTCP_Buffer, 22);
 		  osDelay(1000);
 	    send_str(END_LINE, 1);
+			Led_State = 0;
+			osDelay(1000);
+			if(stringtoreceive[2] == 'S') Led_State = 4;
+			if(stringtoreceive[2] == 'E') Led_State = 5;
 		}
 		osDelay(1000);
 	}
@@ -267,12 +324,9 @@ aTCP_Buffer[10] = DeltaTime >> 24;
 //	aTCP_Buffer[20] = (uint8_t)Version >> 8;
 //	aTCP_Buffer[21] = (uint8_t)Version >> 8;
 tid_ReadADTask = osThreadCreate (osThread(ReadADTask), NULL);
+tid_Rx_Blink = osThreadCreate (osThread(Rx_Blink), NULL);
 while(1)
 {
-		Green_On;
-		osDelay(1000);
-		Green_Off;
-		osDelay(1000);
 	//send_str("Hello world\n", 12);
 }
 }
