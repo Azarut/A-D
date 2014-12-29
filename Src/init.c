@@ -2,7 +2,7 @@
 
 uint8_t stringtosend[] = "DMA\n";
 uint8_t stringtoreceive[32] = {0};
-uint8_t RX_Buffer[11] = {0};
+uint8_t RX_Buffer[48] = {0};
 uint8_t TX_Buffer[904] = {0};
 
 void Configure_GPIO_LED(void)
@@ -128,7 +128,7 @@ DMA_StructInit(&dma);
 dma.DMA_PeripheralBaseAddr = (uint32_t)&(USART2->RDR);
 dma.DMA_MemoryBaseAddr = (uint32_t)RX_Buffer;
 dma.DMA_DIR = DMA_DIR_PeripheralSRC;
-dma.DMA_BufferSize = 16;
+dma.DMA_BufferSize = 48;
 dma.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
 dma.DMA_MemoryInc = DMA_MemoryInc_Enable;
 dma.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;

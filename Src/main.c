@@ -162,7 +162,7 @@ void RX_Clear(void)
 	DMA_StructInit(&dma_2);
 	dma_2.DMA_PeripheralBaseAddr = (uint32_t)&(USART2->RDR);
 	dma_2.DMA_MemoryBaseAddr = (uint32_t)RX_Buffer;
-	dma_2.DMA_BufferSize = 16;
+	dma_2.DMA_BufferSize = 48;
 	dma_2.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
 	dma_2.DMA_MemoryInc = DMA_MemoryInc_Enable;
 	dma_2.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
@@ -215,7 +215,7 @@ void Init_SIM800(void)
 	    send_str(CHK_IP, 9);
 		  osDelay(1000);
 	    send_str(SRV_CONNECT, 43);
-		  osDelay(5000); 
+		  osDelay(5000);
 }
 void UART2_DMA_SEND(uint8_t string[], uint8_t lenghth)
 {
@@ -278,7 +278,6 @@ void ReadADTask (void const *argument)
 			Dyatolic = (RX_Buffer[5] << 4) + RX_Buffer[6];
 			Pulse = (RX_Buffer[7] << 4) + RX_Buffer[8];
 			Systolic += Dyatolic;
-			RX_Clear();
 			aTCP_Buffer[15] = (uint8_t)Systolic;
 			aTCP_Buffer[14] = Systolic >> 8;
 			aTCP_Buffer[17] = (uint8_t)Dyatolic;
@@ -298,7 +297,9 @@ void ReadADTask (void const *argument)
 			osDelay(1000);
 			if(stringtoreceive[2] == 'S') Led_State = 4;
 			if(stringtoreceive[2] == 'E') Led_State = 5;
+			RX_Clear();
 		}
+		else if(RX_Buffer[0] != '0') RX_Clear();
 		osDelay(1000);
 	}
 }

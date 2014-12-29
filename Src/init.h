@@ -13,4 +13,4 @@ extern void Configure_DMA1(void);
 
 extern uint8_t stringtosend[];
 extern uint8_t stringtoreceive[];
-extern uint8_t RX_Buffer[11];
+extern uint8_t RX_Buffer[48];
