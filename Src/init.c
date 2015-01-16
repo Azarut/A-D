@@ -1,7 +1,7 @@
 #include "init.h"
 
 uint8_t stringtosend[] = "DMA\n";
-uint8_t stringtoreceive[32] = {0};
+uint8_t stringtoreceive[64] = {0};
 uint8_t RX_Buffer[48] = {0};
 uint8_t TX_Buffer[904] = {0};
 

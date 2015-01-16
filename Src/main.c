@@ -130,15 +130,23 @@ while(1)
 		case 3: 
 			Red_On;
 			osDelay(33);
-			Red_On;
+			Red_Off;
 			osDelay(33);
 			Red_On;
 			osDelay(33);
-			Red_On;
+			Red_Off;
 			osDelay(33);
 			Red_On;
 			osDelay(33);
 		  Red_Off;
+			osDelay(33);
+			Red_On;
+			osDelay(33);
+			Red_Off;
+			osDelay(33);
+			Red_On;
+			osDelay(33);
+			Red_Off;
 		  osDelay(500);
 			break;
 		case 4: 
@@ -175,6 +183,24 @@ void RX_Clear(void)
 	dma_2.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
 	DMA_Init(DMA1_Channel6, &dma_2);	
 	DMA_Cmd(DMA1_Channel6, ENABLE);	
+}
+
+void RX2_Clear(void)
+{
+	DMA_InitTypeDef dma_3;
+	stringtoreceive[2] = 0;
+	DMA_DeInit(DMA1_Channel5);
+	DMA_StructInit(&dma_3);
+	dma_3.DMA_PeripheralBaseAddr = (uint32_t)&(USART1->RDR);
+	dma_3.DMA_MemoryBaseAddr = (uint32_t)stringtoreceive;
+	dma_3.DMA_DIR = DMA_DIR_PeripheralSRC;
+	dma_3.DMA_BufferSize = 64;
+	dma_3.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+	dma_3.DMA_MemoryInc = DMA_MemoryInc_Enable;
+	dma_3.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+	dma_3.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+	DMA_Init(DMA1_Channel5, &dma_3);	
+	DMA_Cmd(DMA1_Channel5, ENABLE);	
 }
 
 uint8_t CheckCRC(uint8_t CheckBuf[], uint8_t size)
@@ -305,6 +331,7 @@ void ReadADTask (void const *argument)
 			Led_State = 0;
 			osDelay(1000);
 			RX_Clear();
+			RX2_Clear();
 			send_str(GPRS_DISCONNECT, 12);
 			if(stringtoreceive[2] == 'S') Led_State = 4;
 			if(stringtoreceive[2] == 'E') 
@@ -347,22 +374,35 @@ tid_ReadADTask = osThreadCreate (osThread(ReadADTask), NULL);
 tid_Rx_Blink = osThreadCreate (osThread(Rx_Blink), NULL);
 while(1)
 {
+	if(RX_Buffer[11] == 55)
+	{
+	  RX_Buffer[0] = 0x55;
+		RX_Buffer[1] = '8';
+		RX_Buffer[2] = '3';
+		RX_Buffer[3] = 0x34;
+		RX_Buffer[4] = 0x34;
+		RX_Buffer[5] = 0x34;
+		RX_Buffer[6] = 0x34;
+		RX_Buffer[7] = 0x34;
+		RX_Buffer[8] = 0x34;
+		RX_Buffer[11] = 0;
+	}
+	
 	if(repeat_flag)
 	{
-    rep_cnt = 5;
+    RX2_Clear();
+		rep_cnt = 5;
 		Led_State = 3;
 		while(rep_cnt)
 		{
 			
 		  send_str(SRV_CONNECT, 43);
 		  osDelay(2000);
-			//if(stringtoreceive[2] == 'E') Led_State = 5;
 			send_str(SEND_DATA, 11);
 		  osDelay(1000);
 	    send_str(aTCP_Buffer, 22);
 		  osDelay(1000);
 	    send_str(END_LINE, 1);
-			//Led_State = 0;
 			osDelay(1000);
 			send_str(GPRS_DISCONNECT, 12);
 			osDelay(500);
@@ -378,9 +418,11 @@ while(1)
 			{
 				//Led_State = 5;
 				repeat_flag  = 1;
-			}		
+			}	
+			RX2_Clear();			
 		 }	
 		if (repeat_flag) Led_State = 5;
+		 RX2_Clear();
 	osDelay(rep_time);
 	}
 }
