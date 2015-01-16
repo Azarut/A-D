@@ -19,6 +19,11 @@ uint16_t Systolic = 0;
 uint16_t Dyatolic = 0;
 uint16_t Pulse = 0;
 
+uint16_t rep_time = 60000;
+uint8_t rep_cnt = 5;
+uint8_t Repeat_Buffer[90] = {0};
+uint8_t repeat_flag  = 0;
+uint8_t data_to_send = 0;
 uint8_t Led_State = 0;
 
 int16_t  Version = 0x0003;
@@ -138,7 +143,7 @@ while(1)
 			break;
 		case 4: 
 			Green_On;
-			osDelay(1000);
+			osDelay(3000);
 		  Green_Off;
 			Led_State = 0;
 			break;
@@ -291,6 +296,7 @@ void ReadADTask (void const *argument)
 			Led_State = 1;
 		  send_str(SRV_CONNECT, 43);
 		  osDelay(2000);
+			if(stringtoreceive[2] == 'E') Led_State = 5;
 			send_str(SEND_DATA, 11);
 		  osDelay(1000);
 	    send_str(aTCP_Buffer, 22);
@@ -298,10 +304,19 @@ void ReadADTask (void const *argument)
 	    send_str(END_LINE, 1);
 			Led_State = 0;
 			osDelay(1000);
-			if(stringtoreceive[2] == 'S') Led_State = 4;
-			if(stringtoreceive[2] == 'E') Led_State = 5;
 			RX_Clear();
 			send_str(GPRS_DISCONNECT, 12);
+			if(stringtoreceive[2] == 'S') Led_State = 4;
+			if(stringtoreceive[2] == 'E') 
+			{
+				Led_State = 5;
+				repeat_flag  = 1;
+   			Repeat_Buffer[3*data_to_send] = Systolic;
+				Repeat_Buffer[3*data_to_send + 1] = Dyatolic;
+				Repeat_Buffer[3*data_to_send + 2] = Pulse;
+				data_to_send++;
+			}
+			
 		}
 		else if(RX_Buffer[0] != '0') RX_Clear();
 		osDelay(1000);
@@ -332,7 +347,42 @@ tid_ReadADTask = osThreadCreate (osThread(ReadADTask), NULL);
 tid_Rx_Blink = osThreadCreate (osThread(Rx_Blink), NULL);
 while(1)
 {
-	//send_str("Hello world\n", 12);
+	if(repeat_flag)
+	{
+    rep_cnt = 5;
+		Led_State = 3;
+		while(rep_cnt)
+		{
+			
+		  send_str(SRV_CONNECT, 43);
+		  osDelay(2000);
+			//if(stringtoreceive[2] == 'E') Led_State = 5;
+			send_str(SEND_DATA, 11);
+		  osDelay(1000);
+	    send_str(aTCP_Buffer, 22);
+		  osDelay(1000);
+	    send_str(END_LINE, 1);
+			//Led_State = 0;
+			osDelay(1000);
+			send_str(GPRS_DISCONNECT, 12);
+			osDelay(500);
+			rep_cnt--;	
+			
+			if(stringtoreceive[2] == 'S') 
+			{
+				Led_State = 4;
+				rep_cnt = 0;
+				repeat_flag  = 0;
+			}
+			if(stringtoreceive[2] == 'E') 
+			{
+				//Led_State = 5;
+				repeat_flag  = 1;
+			}		
+		 }	
+		if (repeat_flag) Led_State = 5;
+	osDelay(rep_time);
+	}
 }
 }
 
