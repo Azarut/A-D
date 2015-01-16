@@ -25,7 +25,7 @@ int16_t  Version = 0x0003;
 int32_t  TransmitterID = 123456789;
 int16_t  MessageType = 3;
 int16_t  DataType = 3082;
-uint32_t DeltaTime = 1000;
+uint32_t DeltaTime = 3000;
 uint16_t SystolicPressure = 190;
 uint16_t DiastolicPressure = 100;
 uint16_t PulseCnt = 140;
@@ -53,6 +53,7 @@ uint8_t SRV_CONNECT[43] = "AT+CIPSTART=\"TCP\",\"054.203.229.250\",\"8081\"\r";
 uint8_t SEND_DATA[11] = "AT+CIPSEND\r";
 uint8_t CHK_GPRS[10] = "AT+CGATT?\r";
 uint8_t GPRS_CONNECT[11] = "AT+CGATT=1\r";
+uint8_t GPRS_DISCONNECT[12] = "AT+CIPCLOSE\r";
 uint8_t END_LINE[1] = {0x1A};
 /*******************************/
 
@@ -119,7 +120,7 @@ while(1)
 			Red_On;
 			osDelay(33);
 		  Red_Off;
-		  osDelay(1000);
+		  osDelay(3000);
 			break;
 		case 3: 
 			Red_On;
@@ -143,7 +144,7 @@ while(1)
 			break;
 		case 5: 
 			Red_On;
-			osDelay(1000);
+			osDelay(3000);
 		  Red_Off;
 			Led_State = 0;
 		break;
@@ -214,8 +215,8 @@ void Init_SIM800(void)
 		  osDelay(1000);
 	    send_str(CHK_IP, 9);
 		  osDelay(1000);
-	    send_str(SRV_CONNECT, 43);
-		  osDelay(5000);
+//	    send_str(SRV_CONNECT, 43);
+//		  osDelay(5000);
 }
 void UART2_DMA_SEND(uint8_t string[], uint8_t lenghth)
 {
@@ -288,6 +289,8 @@ void ReadADTask (void const *argument)
 			aTCP_Buffer[21] = (uint8_t)CRC_calc;
 			aTCP_Buffer[20] =  CRC_calc >> 8;
 			Led_State = 1;
+		  send_str(SRV_CONNECT, 43);
+		  osDelay(2000);
 			send_str(SEND_DATA, 11);
 		  osDelay(1000);
 	    send_str(aTCP_Buffer, 22);
@@ -298,6 +301,7 @@ void ReadADTask (void const *argument)
 			if(stringtoreceive[2] == 'S') Led_State = 4;
 			if(stringtoreceive[2] == 'E') Led_State = 5;
 			RX_Clear();
+			send_str(GPRS_DISCONNECT, 12);
 		}
 		else if(RX_Buffer[0] != '0') RX_Clear();
 		osDelay(1000);
