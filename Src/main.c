@@ -323,9 +323,10 @@ void ReadADTask (void const *argument)
 			//RX2_Clear();
 		  send_str(SRV_CONNECT, 43);
 		  osDelay(2000);
-			if(stringtoreceive[2] == 'E') 
+			if(stringtoreceive[8] == 'E') 
 			{
 				Led_State = 5;
+				osDelay(3000);
 				repeat_flag  = 1;
 				RX_Clear();
 				RX2_Clear();
@@ -338,15 +339,28 @@ void ReadADTask (void const *argument)
 			{
 				send_str(SEND_DATA, 11);
 				osDelay(1000);
+				if(stringtoreceive[2] == 'E') 
+				{
+					Led_State = 5;
+					osDelay(3000);
+					repeat_flag  = 1;
+					RX_Clear();
+					RX2_Clear();
+					Repeat_Buffer[3*data_to_send] = Systolic;
+					Repeat_Buffer[3*data_to_send + 1] = Dyatolic;
+					Repeat_Buffer[3*data_to_send + 2] = Pulse;
+					data_to_send++;
+				}
 				send_str(aTCP_Buffer, 22);
 				osDelay(1000);
 				send_str(END_LINE, 1);
 				Led_State = 0;
 				osDelay(1000);
-				RX_Clear();
-				RX2_Clear();
 				
-				if(stringtoreceive[2] == 'S') Led_State = 4;
+				RX_Clear();				
+				if(stringtoreceive[2] == 'S') 
+					Led_State = 4;
+				RX2_Clear();
 			}
 			send_str(GPRS_DISCONNECT, 12);
 			
@@ -357,7 +371,7 @@ void ReadADTask (void const *argument)
 }
 
 void MainTask (void const *argument)
-{
+{ uint16_t data_send_tmp = 0;
 Init_SIM800();
 aTCP_Buffer[1] = (uint8_t)Version;
 aTCP_Buffer[0] = Version >> 8;
@@ -399,35 +413,73 @@ while(1)
     RX2_Clear();
 		rep_cnt = 5;
 		Led_State = 3;
+		data_send_tmp = data_to_send;
 		Init_SIM800();
 		while(rep_cnt)
 		{
 			RX2_Clear();
-		  send_str(SRV_CONNECT, 43);
-		  osDelay(2000);
-			send_str(SEND_DATA, 11);
-		  osDelay(1000);
-	    send_str(aTCP_Buffer, 22);
-		  osDelay(1000);
-	    send_str(END_LINE, 1);
-			osDelay(1000);	
-			rep_cnt--;			
-			if(stringtoreceive[2] == 'S') 
+			
+			while(data_send_tmp)
 			{
-				Led_State = 4;
-				rep_cnt = 0;
-				repeat_flag  = 0;
+					data_send_tmp--;
+					aTCP_Buffer[15] = Repeat_Buffer[3*data_send_tmp];
+					aTCP_Buffer[14] = 0;
+					aTCP_Buffer[17] = Repeat_Buffer[3*data_send_tmp + 1];
+					aTCP_Buffer[16] = 0;
+					aTCP_Buffer[19] = Repeat_Buffer[3*data_send_tmp+ 2];
+					aTCP_Buffer[18] = 0;
+					CRC_calc = crc16((uint32_t*)aTCP_Buffer, 20);
+					aTCP_Buffer[21] = (uint8_t)CRC_calc;
+					aTCP_Buffer[20] =  CRC_calc >> 8;
+					send_str(SRV_CONNECT, 43);
+					osDelay(2000);
+					send_str(SEND_DATA, 11);
+					osDelay(1000);
+					send_str(aTCP_Buffer, 22);
+					osDelay(1000);
+					send_str(END_LINE, 1);
+					osDelay(1000);	
+					rep_cnt--;			
+					if(stringtoreceive[2] == 'S') 
+					{
+						Led_State = 4;
+						rep_cnt = 0;
+						repeat_flag  = 0;
+						data_to_send = 0;
+					}
+					send_str(GPRS_DISCONNECT, 12);
+					osDelay(500);				
+					if(stringtoreceive[2] == 'E') 
+					{
+						//Led_State = 5;
+						repeat_flag  = 1;
+					}			
 			}
-			send_str(GPRS_DISCONNECT, 12);
-			osDelay(500);
-			
-			
+//		  send_str(SRV_CONNECT, 43);
+//		  osDelay(2000);
+//			send_str(SEND_DATA, 11);
+//		  osDelay(1000);
+//	    send_str(aTCP_Buffer, 22);
+//		  osDelay(1000);
+//	    send_str(END_LINE, 1);
+//			osDelay(1000);	
+//			rep_cnt--;			
+//			if(stringtoreceive[2] == 'S') 
+//			{
+//				Led_State = 4;
+//				rep_cnt = 0;
+//				repeat_flag  = 0;
+//			}
+//			send_str(GPRS_DISCONNECT, 12);
+//			osDelay(500);
+//			
+//			
 
-			if(stringtoreceive[2] == 'E') 
-			{
-				//Led_State = 5;
-				repeat_flag  = 1;
-			}	
+//			if(stringtoreceive[2] == 'E') 
+//			{
+//				//Led_State = 5;
+//				repeat_flag  = 1;
+//			}	
 			RX2_Clear();			
 		 }	
 		if (repeat_flag) Led_State = 5;

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\A&D_v3.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\A&D_v3.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050041: Last Updated: Sun Jan 18 15:34:28 2015
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050041: Last Updated: Sun Jan 18 22:34:32 2015
 <BR><P>
 <H3>Maximum Stack Usage =        152 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -292,7 +292,8 @@ Global Symbols
 <P><STRONG><a name="[86]"></a>crc16</STRONG> (Thumb, 40 bytes, Stack size 12 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = crc16
 </UL>
-<BR>[Called By]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadADTask
+<BR>[Called By]<UL><LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MainTask
+<LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadADTask
 <LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CheckCRC
 </UL>
 
@@ -360,7 +361,7 @@ Global Symbols
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_Cmd
 </UL>
 
-<P><STRONG><a name="[5f]"></a>ReadADTask</STRONG> (Thumb, 506 bytes, Stack size 0 bytes, main.o(.text))
+<P><STRONG><a name="[5f]"></a>ReadADTask</STRONG> (Thumb, 608 bytes, Stack size 0 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = ReadADTask &rArr; RX2_Clear &rArr; DMA_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
@@ -371,7 +372,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
-<P><STRONG><a name="[5e]"></a>MainTask</STRONG> (Thumb, 374 bytes, Stack size 0 bytes, main.o(.text))
+<P><STRONG><a name="[5e]"></a>MainTask</STRONG> (Thumb, 474 bytes, Stack size 0 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = MainTask &rArr; osThreadCreate &rArr; svcThreadCreate &rArr; rt_tsk_create &rArr; rt_dispatch &rArr; rt_put_prio
 </UL>
 <BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osThreadCreate
@@ -379,6 +380,7 @@ Global Symbols
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Init_SIM800
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_str
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RX2_Clear
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;crc16
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
