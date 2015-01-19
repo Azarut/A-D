@@ -795,13 +795,13 @@ ARM Macro Assembler    Page 13
               00000200 
               00000000 
 Command Line: --debug --xref --cpu=Cortex-M4.fp --apcs=interwork --depend=.\obj
-ects\startup_stm32f303xc.d -o.\objects\startup_stm32f303xc.o -IC:\Users\Юыху\Do
-cuments\GIT\A-D\MDK-ARM\RTE -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\4.2.0\CMSIS\Include
- -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\4.2.0\CMSIS_RTX\INC -IC:\Keil_v5\ARM\PACK\Keil
-\MDK-Middleware\6.2.0\Board -IC:\Keil_v5\ARM\PACK\Keil\STM32F3xx_DFP\1.1.0\Devi
-ce\Include --predefine="__RTX SETA 1" --predefine="_RTE_ SETA 1" --predefine="S
-TM32F303xC SETA 1" --list=.\listings\startup_stm32f303xc.lst RTE\Device\STM32F3
-03VC\startup_stm32f303xc.s
+ects\startup_stm32f303xc.d -o.\objects\startup_stm32f303xc.o -IF:\WORK\SOURSE\S
+ORCES\A&D\MDK-ARM\RTE -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\4.2.0\CMSIS\Include -IC:\
+Keil_v5\ARM\PACK\ARM\CMSIS\4.2.0\CMSIS_RTX\INC -IC:\Keil_v5\ARM\PACK\Keil\MDK-M
+iddleware\6.2.0\Board -IC:\Keil_v5\ARM\PACK\Keil\STM32F3xx_DFP\1.2.0\Device\Inc
+lude --predefine="__RTX SETA 1" --predefine="_RTE_ SETA 1" --predefine="STM32F3
+03xC SETA 1" --list=.\listings\startup_stm32f303xc.lst RTE\Device\STM32F303VC\s
+tartup_stm32f303xc.s
 
 
 

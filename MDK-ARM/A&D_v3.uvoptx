@@ -163,25 +163,9 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>C:\Users\РћР»РµРі\Documents\GIT\A-D\Src\main.c</Filename>
+          <Filename>..\Src\main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\A_D_v3\../Src/main.c\326</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>424</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134220466</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>C:\Users\РћР»РµРі\Documents\GIT\A-D\Src\main.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\A_D_v3\../Src/main.c\424</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -327,7 +311,7 @@
       <GroupNumber>1</GroupNumber>
       <FileNumber>1</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
@@ -353,7 +337,7 @@
 
   <Group>
     <GroupName>SPL</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -517,7 +501,7 @@
 
   <Group>
     <GroupName>::Board Support</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>1</RteFlg>
@@ -529,7 +513,7 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>C:\Keil_v5\ARM\PACK\Keil\STM32F3xx_DFP\1.1.0\Boards\ST\STM32F3-Discovery\Common\LED_STM32F3-Discovery.c</PathWithFileName>
+      <PathWithFileName>C:\Keil_v5\ARM\PACK\Keil\STM32F3xx_DFP\1.2.0\Boards\ST\STM32F3-Discovery\Common\LED_STM32F3-Discovery.c</PathWithFileName>
       <FilenameWithoutPath>LED_STM32F3-Discovery.c</FilenameWithoutPath>
       <RteFlg>1</RteFlg>
       <bShared>0</bShared>
@@ -572,7 +556,7 @@
 
   <Group>
     <GroupName>::Device</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>1</RteFlg>

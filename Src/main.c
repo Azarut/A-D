@@ -351,13 +351,12 @@ void ReadADTask (void const *argument)
 					Repeat_Buffer[3*data_to_send + 2] = Pulse;
 					data_to_send++;
 				}
-				send_str(aTCP_Buffer, 22);
-				osDelay(1000);
-				send_str(END_LINE, 1);
-				Led_State = 0;
-				osDelay(1000);
-				
-				RX_Clear();				
+					send_str(aTCP_Buffer, 22);
+					osDelay(1000);
+					send_str(END_LINE, 1);
+				//Led_State = 0;
+					osDelay(1000);
+				  RX_Clear();				
 				if(stringtoreceive[2] == 'S') 
 					Led_State = 4;
 				RX2_Clear();
@@ -412,13 +411,13 @@ while(1)
 	{
     RX2_Clear();
 		rep_cnt = 5;
-		Led_State = 3;
+		
 		data_send_tmp = data_to_send;
 		Init_SIM800();
 		while(rep_cnt)
 		{
 			RX2_Clear();
-			
+			Led_State = 3;
 			while(data_send_tmp)
 			{
 					data_send_tmp--;
